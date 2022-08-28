@@ -1,7 +1,8 @@
-import allennlp.predictors.Predictor as Predictor
+import pickle
 
-model_url = "https://storage.googleapis.com/allennlp-public-models/coref-spanbert-large-2020.02.27.tar.gz"
-predictor = Predictor.from_path(model_url)
+# load saved model
+with open('model_pkl' , 'rb') as f:
+    predictor = pickle.load(f)
 
 text = "Joseph Robinette Biden Jr. is an American politician who is the 46th and\
 current president of the United States. A member of the Democratic Party, \
