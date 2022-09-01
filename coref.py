@@ -1,7 +1,7 @@
 import pickle
 
 # load saved model
-with open('model_pkl' , 'rb') as f:
+with open('allen_coref' , 'rb') as f:
     predictor = pickle.load(f)
 
 text = "Joseph Robinette Biden Jr. is an American politician who is the 46th and\
