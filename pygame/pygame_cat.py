@@ -2,7 +2,7 @@ import pygame
 import glob
  
 SIZE = WIDTH, HEIGHT = 600, 600 #the width and height of our screen
-FPS = 20 #Frames per second
+FPS = 9 #Frames per second
  
 class MySprite(pygame.sprite.Sprite):
     def __init__(self):
