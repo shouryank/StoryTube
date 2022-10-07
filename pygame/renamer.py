@@ -1,7 +1,7 @@
 import glob
 import os
 
-path = r'D:\Documents\PESU\capstone\code\StoryTube\pygame\cat\\'
+path = r'D:\Documents\PESU\capstone\code\StoryTube\pygame\dog\\'
 
 # search text files starting with the word "sales"
 pattern = path + "dead" + "*.png"
