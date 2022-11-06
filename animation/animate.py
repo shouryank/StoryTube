@@ -4,6 +4,8 @@ import glob
 from time import sleep
 from gtts import gTTS
 import os
+import nltk
+from nltk.stem.wordnet import WordNetLemmatizer
 
 language = 'en'
 
@@ -31,9 +33,12 @@ class MySprite(pygame.sprite.Sprite):
             if type(action) == list:
                 dialogues.append(action[1])
 
-            self.actions.append(action[0] if type(action) == list else action)
+            # self.actions.append(action[0] if type(action) == list else action)
+                        
+            action = WordNetLemmatizer().lemmatize(action[0] if type(action) == list else action,'v')   
+            self.actions.append(action)
             print(self.actions)
-            
+
             if action not in self.images:
                 self.images[action] = [pygame.transform.scale(pygame.image.load(img) , (200,200)) for img in glob.glob(images_path + char + "\\" + action + "\\*")]
             
@@ -75,7 +80,7 @@ class MySprite(pygame.sprite.Sprite):
             global dialogue_count
             self.play_dialogue(dialogue_count)
             dialogue_count += 1
-            print("dialogie played")
+            print("dialogue played")
         if self.index >= len(self.images[self.actions[self.action_count]]):
             if self.action_count >= len(self.actions) - 1:
                 return 1
@@ -92,7 +97,7 @@ class MySprite(pygame.sprite.Sprite):
         return 0
 
     def update_idle(self):
-        self.image = pygame.transform.scale(pygame.image.load(images_path + self.char + "/idle1.png") , (200,200))
+        self.image = pygame.transform.scale(pygame.image.load(images_path + self.char + "/idle/idle1.png") , (200,200))
         flip_var = True if self.dir == "l" else False
         print(flip_var)
         self.image = pygame.transform.flip(self.image, flip_var, False)
@@ -107,6 +112,7 @@ def animate(characters, svos, actions_movement):
         dir = list(dir_list.keys())[i % 2]
         char_objects.append(MySprite(characters[i], dir_list[dir] * ((i % 2) + 1), 350, dir, svos, actions_movement))
     # my_group = pygame.sprite.Group(my_sprite)
+
     idle_char = []
     clock = pygame.time.Clock()
     
