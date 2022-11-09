@@ -8,6 +8,7 @@ from tkinter import ttk
 #     root.quit
 
 def delete():
+    global text
     text = txt1.get(1.0, "end-1c")
     print(text)
     txt1.delete("1.0","end")
