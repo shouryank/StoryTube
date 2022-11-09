@@ -5,13 +5,14 @@ from coref_resolution import coref
 
 from clausIE import refactor_sv, sv, weather_extraction
 
-from nltk.stem.snowball import SnowballStemmer
-
 from animation import animate
 
 def pipeline():
-
     #extracting the story from the gui
+    # Default story:
+    """
+        A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking in the opposite direction. It ran. The dog said "Hello world, the cat is going to die hahaha".
+    """
     text = txt1.get(1.0, "end-1c")
 
     # Coref resolution
@@ -25,14 +26,6 @@ def pipeline():
 
     # Assign char to action
     svs, characters = refactor_sv.refactor_sv(svs)
-
-    # Create new stemmer for the words
-    stemmer = SnowballStemmer("english")
-
-    #word2vec similarity between the incoming action vs the ones we have in list of actions and then set a threshold and execute the action based on it
-
-    # nltk.download('omw-1.4')
-    # nltk.download('wordnet')
 
     animate.animate(characters, svs, weather)
 

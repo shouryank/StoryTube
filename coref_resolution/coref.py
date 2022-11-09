@@ -12,16 +12,16 @@ with open(p , 'rb') as f:
 def resolve_coref(text):
     print("---------------COREF MODULE---------------")
     
-    prediction = predictor.predict(document=text)  # get prediction
     corefed_text = predictor.coref_resolved(text)
+    # prediction = predictor.predict(document=text)  # get prediction
 
-    for cluster in prediction['clusters']:
-        print(cluster)  # list of clusters (the indices of spaCy tokens)
+    # for cluster in prediction['clusters']:
+    #     print(cluster)  # list of clusters (the indices of spaCy tokens)
 
-    print('\n\n') #Newline
+    # print('\n\n') #Newline
 
-    print('Coref resolved: ', corefed_text)  # resolved text
+    # print('Coref resolved: ', corefed_text)  # resolved text
 
-    print("---------------END OF COREF MODULE---------------")
+    # print("---------------END OF COREF MODULE---------------")
 
     return corefed_text
