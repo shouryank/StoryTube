@@ -3,7 +3,7 @@ from tkinter import *
 
 from coref_resolution import coref
 
-from clausIE import refactor_svo, svo, weather_extraction
+from clausIE import refactor_sv, sv, weather_extraction
 
 from nltk.stem.snowball import SnowballStemmer
 
@@ -20,11 +20,11 @@ def pipeline():
     # Weather extraction
     weather = weather_extraction.get_weather(text)
 
-    # Get svos
-    svos = svo.extract_svo(text, corefed_text)
+    # Get svs
+    svs = sv.extract_sv(text, corefed_text)
 
     # Assign char to action
-    svos, characters = refactor_svo.refactor_svo(svos)
+    svs, characters = refactor_sv.refactor_sv(svs)
 
     # Create new stemmer for the words
     stemmer = SnowballStemmer("english")
@@ -34,7 +34,7 @@ def pipeline():
     # nltk.download('omw-1.4')
     # nltk.download('wordnet')
 
-    animate.animate(characters, svos, weather)
+    animate.animate(characters, svs, weather)
 
 
 root = tk.Tk()

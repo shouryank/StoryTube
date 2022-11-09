@@ -33,7 +33,7 @@ class MySprite(pygame.sprite.Sprite):
         self.images = {}
         self.actions = []
         # self.images = [pygame.image.load(img) for img in glob.glob("pygame\\cat\\*.png")]
-        # for action in svos[char]:
+        # for action in svs[char]:
         #     if type(action) == list:
         #         dialogues.append(action[1])
         #     action = WordNetLemmatizer().lemmatize(action[0] if type(action) == list else action,'v')   
@@ -53,7 +53,7 @@ class MySprite(pygame.sprite.Sprite):
         self.prev_action = None  
 
     def play_dialogue(self, dialogue):
-        myobj = gTTS(text=dialogue, lang=language, slow=False)
+        myobj = gTTS(text=self.char + " said " + dialogue, lang=language, slow=False)
         myobj.save("dialogue.mp3")
         with audioread.audio_open('dialogue.mp3') as f:
             totalsec = f.duration
@@ -122,7 +122,7 @@ class MySprite(pygame.sprite.Sprite):
         self.movement_update(0)
         
  
-def animate(characters, svos, extracted_weather):
+def animate(characters, svs, extracted_weather):
     bg = pygame.transform.scale(pygame.image.load(weather_path + extracted_weather + '.jpg') , SIZE)
 
     pygame.init()
@@ -139,14 +139,14 @@ def animate(characters, svos, extracted_weather):
 
 
     return_val = 0
-    for svo in svos:
-        print(svo)
-        character = svo[0]
-        action = svo[1]
+    for sv in svs:
+        print(sv)
+        character = sv[0]
+        action = sv[1]
         dialogue = ""
 
-        if(len(svo) == 3):
-            dialogue = svo[2]
+        if(len(sv) == 3):
+            dialogue = sv[2]
         
         flag = 0
         pygame.event.get()
