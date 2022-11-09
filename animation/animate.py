@@ -6,6 +6,7 @@ from gtts import gTTS
 import os
 import nltk
 from nltk.stem.wordnet import WordNetLemmatizer
+import audioread
 
 language = 'en'
 
@@ -13,8 +14,8 @@ SIZE = WIDTH, HEIGHT = 1280, 720 #the width and height of our screen
 FPS = 7 #Frames per second
 
 screen = pygame.display.set_mode(SIZE)
-images_path = r'assets/images/'
-bg = pygame.transform.scale(pygame.image.load(images_path + 'sunny_day.png') , SIZE)
+character_path = r'assets/characters/'
+weather_path = r'assets/weather/'
 
 dir_list = {'r' : 200, 'l' : 400} #moving towards which direction
 
@@ -40,7 +41,7 @@ class MySprite(pygame.sprite.Sprite):
             print(self.actions)
 
             if action not in self.images:
-                self.images[action] = [pygame.transform.scale(pygame.image.load(img) , (200,200)) for img in glob.glob(images_path + char + "\\" + action + "\\*")]
+                self.images[action] = [pygame.transform.scale(pygame.image.load(img) , (200,200)) for img in glob.glob(character_path + char + "\\" + action + "\\*")]
             
         print(self.images)
         self.char = char
@@ -51,14 +52,18 @@ class MySprite(pygame.sprite.Sprite):
         self.y = y
         self.svos = svos
         self.actions_movement = actions_movement
+        self.image = None
 
     def play_dialogue(self, index):
         myobj = gTTS(text=dialogues[index], lang=language, slow=False)
         myobj.save("dialogue.mp3")
+        with audioread.audio_open('dialogue.mp3') as f:
+            totalsec = f.duration
         pygame.mixer.init()
         pygame.mixer.music.load("dialogue.mp3")
         pygame.mixer.music.set_volume(1)
         pygame.mixer.music.play()
+        sleep(totalsec)
         
     def movement_update(self):
         # if self.x == 880:
@@ -97,20 +102,22 @@ class MySprite(pygame.sprite.Sprite):
         return 0
 
     def update_idle(self):
-        self.image = pygame.transform.scale(pygame.image.load(images_path + self.char + "/idle/idle1.png") , (200,200))
+        self.image = pygame.transform.scale(pygame.image.load(character_path + self.char + "/idle/idle1.png") , (200,200))
         flip_var = True if self.dir == "l" else False
         print(flip_var)
         self.image = pygame.transform.flip(self.image, flip_var, False)
         screen.blit(self.image, (self.x, self.y))
         
  
-def animate(characters, svos, actions_movement):
+def animate(characters, svos, actions_movement, extracted_weather):
+    bg = pygame.transform.scale(pygame.image.load(weather_path + extracted_weather + '.jpg') , SIZE)
+
     pygame.init()
     pygame.display.set_caption("Trace")
     char_objects = []
     for i in range(len(characters)):
         dir = list(dir_list.keys())[i % 2]
-        char_objects.append(MySprite(characters[i], dir_list[dir] * ((i % 2) + 1), 350, dir, svos, actions_movement))
+        char_objects.append(MySprite(characters[i], dir_list[dir] * ((i % 2) + 1), 480, dir, svos, actions_movement))
     # my_group = pygame.sprite.Group(my_sprite)
 
     idle_char = []

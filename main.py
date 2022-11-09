@@ -1,17 +1,20 @@
 import py_compile
 from coref_resolution import coref
-from defualt_svo import char_to_action, extract_svo
+from clausIE import char_to_action, svo, weather_extraction
 from nltk.stem.snowball import SnowballStemmer
 import nltk
 from animation import animate
 
-text = """A cat is walking on a sunny day. It jumped over a stone. It died.""" #  Dog is walking in the opposite direction. It ran. The dog said "Hello world"."""
+text = """A cat is walking on a snowy day. It jumped over a stone. It died. It ran. Dog is walking in the opposite direction. It ran. The dog said "Hello world, the cat is going to die hahaha".""" #  Dog is walking in the opposite direction. It ran. The dog said "Hello world"."""
 
 # Coref resolution
 corefed_text = coref.resolve_coref(text)
 
+# Weather extraction
+weather = weather_extraction.get_weather(text)
+
 # Get svos
-svos = extract_svo.extract_svos(corefed_text)
+svos = svo.extract_svo(text, corefed_text)
 
 # Assign char to action
 svos = char_to_action.assign_char_to_action(svos)
@@ -29,4 +32,4 @@ actions_movement = {'die' : 0, 'fall' : 0, 'hurt' : 0, 'idle' : 0, 'jump' : 1, '
 characters = char_to_action.get_characters(svos)
 print(characters)
 
-animate.animate(characters, svos, actions_movement)
+animate.animate(characters, svos, actions_movement, weather)
