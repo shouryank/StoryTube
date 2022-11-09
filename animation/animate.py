@@ -168,5 +168,3 @@ def animate(characters, svos, extracted_weather):
                 char_objects[character].play_dialogue(dialogue)
                 print("dialogue played")
                 dialogue = ""
-
-    pygame.quit()
