@@ -3,6 +3,10 @@ from spacy.matcher import Matcher
 import claucy
 import re
 from spacy.language import Language
+from spacy.lang.en import English # updated
+
+sent_nlp = spacy.load("en_core_web_sm")
+sent_nlp.add_pipe('sentencizer') # updated
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -44,8 +48,14 @@ def get_sv_from_line(text):
 def extract_sv(text, coref_text):
     print("---------------SV MODULE---------------")
     SVs = []
+
+    raw_sent = [sent.text.strip() for sent in sent_nlp(text).sents]
+    coref_sent = [sent.text.strip() for sent in sent_nlp(coref_text).sents]
+
+    print(raw_sent, coref_sent)
+
     # Iterate through each line
-    for line, dialogue_line in zip(coref_text.split('.'), text.split('.')):
+    for line, dialogue_line in zip(coref_sent, raw_sent):
         # Append the list of SVs for that line
         SV = []
         SV += get_sv_from_line(line)
@@ -76,5 +86,5 @@ def extract_sv(text, coref_text):
 
 if __name__ == "__main__":
     # Test for the module
-    extract_sv('A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking in the opposite direction. It ran. The dog said "Hello world, the cat is going to die hahaha".', 
-    'A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking in the opposite direction. It ran. The dog said "Hello world, the cat is going to die hahaha".')
+    extract_sv('A detective was walking on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attcking".', 
+    'A detective was walking on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attcking".')

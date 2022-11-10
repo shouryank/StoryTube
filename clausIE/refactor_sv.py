@@ -2,13 +2,17 @@ from nltk.corpus import stopwords
 from collections import defaultdict
 from nltk.tokenize import word_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
+import nltk
+
+# nltk.download('omw-1.4')
+# nltk.download('wordnet')
 
 stop_words = set(stopwords.words('english'))
 
 def filter_sent(text):
     word_tokens = word_tokenize(text)
     filtered_subject = [w.lower() for w in word_tokens if not w.lower() in stop_words]
-    return "".join(filtered_subject)
+    return " ".join(filtered_subject)
 
 def refactor_sv(SVs):
     print("---------------REFACTOR SV MODEL MODULE---------------")

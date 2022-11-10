@@ -1,12 +1,11 @@
-from numpy import character
+# from numpy import character
 import pygame
 import glob
 from time import sleep
 from gtts import gTTS
-import os
-import nltk
-from nltk.stem.wordnet import WordNetLemmatizer
 import audioread
+from constants import actions_movement
+from utils import char_action_set_getter
 
 language = 'en'
 
@@ -22,8 +21,8 @@ dir_list = {'r' : 200, 'l' : 400} #moving towards which direction
 dialogues = []
 dialogue_count = 0
 
-# Get actions_movement
-actions_movement = {'die' : 0, 'fall' : 0, 'hurt' : 0, 'idle' : 0, 'jump' : 1, 'run' : 1, 'slide' : 1, 'walk' : 1, 'say': 0}
+# Get character action mapping that is supported
+char_action_set = char_action_set_getter.get_char_action_set()
 
 class MySprite(pygame.sprite.Sprite):
 
@@ -78,8 +77,10 @@ class MySprite(pygame.sprite.Sprite):
         if not flag:
             self.image = self.images[action][self.index]
             self.index += 1
-
-            self.movement_update(FPS if actions_movement[action] else 0)
+            if action in actions_movement:
+                self.movement_update(FPS if actions_movement[action] else 0)
+            else:
+                self.movement_update(0)
         else:
             self.prev_action = action
             self.play_prev_frame()
@@ -124,24 +125,38 @@ def animate(characters, SVs, extracted_weather):
         flag = 0
         dialogues = {}
         characters_in_line = [sv[0] for sv in line]
-        
+        n = len(characters_in_line)
+
+        done = {}
+        for sv in line:
+            done[sv] = 0
+
         while not flag:
+            print("LINE ISSSSSSSS " , line)
             pygame.event.get()
 
             screen.fill((0,0,0))        
             screen.blit(bg, (0, 0))
 
             for sv in line:
+                if done[sv]:
+                    continue
+
                 character = sv[0]
                 action = sv[1]
                 dialogue = ""
 
+                if character not in char_action_set or action not in char_action_set[character]:
+                    done[sv] = 1
+                    char_objects[character].play_prev_frame()
+                    continue
+
                 if(len(sv) == 3):
                     dialogue = sv[2]
 
-                flag = char_objects[character].update(action)
+                done[sv] = char_objects[character].update(action)
 
-                if not flag:
+                if flag == n:
                     dialogues[character] = dialogue
 
                 for char in char_objects:
@@ -156,3 +171,10 @@ def animate(characters, SVs, extracted_weather):
                     char_objects[character].play_dialogue(dialogue)
                     print("dialogue played")
                     dialogues[character] = ""
+
+            flag = 1
+
+            for sv, i in done.items():
+                if i == 0:
+                    flag = 0
+                    break
