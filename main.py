@@ -12,7 +12,7 @@ def pipeline():
     # Default story:
     """
         A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking in the opposite direction. It ran. The dog said "Hello world, the cat is going to die hahaha".
-        A detective was walking on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking".
+        A detective was running on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking".
     """
     text = txt1.get(1.0, "end-1c")
 

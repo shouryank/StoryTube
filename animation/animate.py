@@ -139,25 +139,25 @@ def animate(characters, SVs, extracted_weather):
             screen.blit(bg, (0, 0))
 
             for sv in line:
-                if done[sv]:
-                    continue
 
                 character = sv[0]
                 action = sv[1]
                 dialogue = ""
+
+                if(len(sv) == 3):
+                    dialogue = sv[2]
+
+                dialogues[character] = dialogue
+
+                if done[sv]:
+                    continue
 
                 if character not in char_action_set or action not in char_action_set[character]:
                     done[sv] = 1
                     char_objects[character].play_prev_frame()
                     continue
 
-                if(len(sv) == 3):
-                    dialogue = sv[2]
-
                 done[sv] = char_objects[character].update(action)
-
-                if flag == n:
-                    dialogues[character] = dialogue
 
                 for char in char_objects:
                     if char not in characters_in_line:
@@ -166,15 +166,18 @@ def animate(characters, SVs, extracted_weather):
             pygame.display.update()
             clock.tick(FPS)
 
-            for character, dialogue in dialogues.items():
-                if dialogue != "":
-                    char_objects[character].play_dialogue(dialogue)
-                    print("dialogue played")
-                    dialogues[character] = ""
+            print("Dialogues: ", dialogues)
 
             flag = 1
 
-            for sv, i in done.items():
-                if i == 0:
+            for sv, x in done.items():
+                if x == 0:
                     flag = 0
                     break
+
+            if flag:
+                for character, dialogue in dialogues.items():
+                    if dialogue != "":
+                        char_objects[character].play_dialogue(dialogue)
+                        print("dialogue played")
+                        dialogues[character] = ""
