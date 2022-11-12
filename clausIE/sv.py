@@ -3,14 +3,10 @@ from spacy.matcher import Matcher
 import claucy
 import re
 from spacy.language import Language
-from spacy.lang.en import English # updated
-
-sent_nlp = spacy.load("en_core_web_sm")
-sent_nlp.add_pipe('sentencizer') # updated
-
-nlp = spacy.load("en_core_web_sm")
+import split_text_to_sentences
 
 '''Add logic to ignore dialogues in NLP'''
+nlp = spacy.load("en_core_web_sm")
 matcher = Matcher(nlp.vocab)
 pattern = [{'ORTH': '"'},
            {'OP': '+', 'IS_ASCII': True},
@@ -44,18 +40,26 @@ def get_sv_from_line(text):
 
     return SVs
 
-# Input is the normal story and the coreference resolved story
+'''
+    Main function that actually extracts the SV
+    Input is the normal story and the coreference resolved story
+'''
 def extract_sv(text, coref_text):
     print("---------------SV MODULE---------------")
     SVs = []
 
-    raw_sent = [sent.text.strip() for sent in sent_nlp(text).sents]
-    coref_sent = [sent.text.strip() for sent in sent_nlp(coref_text).sents]
+    # Split text into sentences
+    raw_sentences = split_text_to_sentences.split_into_sentences(text)
+    coref_sentences = split_text_to_sentences.split_into_sentences(coref_text)
 
-    print(raw_sent, coref_sent)
+    print(raw_sentences, end = "\nUNGABUNGA\n")
+    print(coref_sentences, end = "\nUNGABUNGA\n")
 
     # Iterate through each line
-    for line, dialogue_line in zip(coref_sent, raw_sent):
+    for line, dialogue_line in zip(coref_sentences, raw_sentences):
+        # Subsititute dialogue        
+        re.sub(r"([\"\'])(?:(?=(\\?))\2.)*?\1", " ", line)
+
         # Append the list of SVs for that line
         SV = []
         SV += get_sv_from_line(line)
@@ -72,6 +76,7 @@ def extract_sv(text, coref_text):
         for sv in SV:
             # If dialogues are there in line
             if result:
+                print(line)
                 sv = [(str(sv.subject), str(sv.verb), result.group().strip("\""))]
             # If no dialogues
             else:
@@ -86,5 +91,5 @@ def extract_sv(text, coref_text):
 
 if __name__ == "__main__":
     # Test for the module
-    extract_sv('A detective was walking on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attcking".', 
-    'A detective was walking on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attcking".')
+    extract_sv('A detective was walking on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking. Now die.".', 
+    'A detective was walking on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attcking. Now die.".')

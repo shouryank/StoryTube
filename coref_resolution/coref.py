@@ -13,7 +13,7 @@ with open(p , 'rb') as f:
 def resolve_coref(text):
     print("---------------COREF MODULE---------------")
     # Remove dialogues
-    re.sub(r"([\"\'])(?:(?=(\\?))\2.)*?\1", "India", text)
+    re.sub(r"([\"\'])(?:(?=(\\?))\2.)*?\1", " ", text)
 
     corefed_text = predictor.coref_resolved(text)
     # prediction = predictor.predict(document=text)  # get prediction
