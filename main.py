@@ -73,14 +73,13 @@ print(txt1.get(1.0, "end-1c"))
 lbl3 = Label(root, bg = "#eae9d2", text="\n").grid(column=0, row=4)
 
 
-# separator = ttk.Separator(root, orient='vertical')
-# separator.place(relx=0.5, rely=0, relwidth=0.1, relheight=1)
-
 txtbx = Text(root, height = 20, width = 80, bg = "light yellow")
 txtbx.grid(column=0, row=10)
 
 def redirector(inputStr):     
     txtbx.insert(INSERT, inputStr) 
+    #txtbx.delete(0, END) clear tb after each story
+
 
 sys.stdout.write = redirector
 
@@ -92,5 +91,14 @@ img_label = Label(image=click_btn)
 btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).grid(column=0, row=8)
 
 lbl5 = Label(root, bg = "#eae9d2", text="\n\n").grid(column=0, row=9)
+
+ttk.Separator(
+    master=root,
+    orient=VERTICAL,
+    style='red.TSeparator',
+    class_= ttk.Separator,
+    takefocus= 1,
+    cursor='man'
+).place(relx = 0.33, rely = 0, relheight=1)
 
 root.mainloop()
