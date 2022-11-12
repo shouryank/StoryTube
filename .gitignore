@@ -3,3 +3,5 @@ dragon3
 dialogue.mp3
 clausIE/__pycache__/
 example video output
+venv
+*/__pycache__
