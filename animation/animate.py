@@ -1,12 +1,13 @@
 # from numpy import character
 import pygame
 import glob
-import random
 from time import sleep
-from gtts import gTTS
 import audioread
 from constants import actions_movement
 from utils import char_action_set_getter
+from pathlib import Path
+import os
+from constants import dialogues_path
 
 language = 'en'
 
@@ -31,6 +32,7 @@ class MySprite(pygame.sprite.Sprite):
         super(MySprite, self).__init__()
         
         self.images = {}
+        self.image = pygame.Surface((0,0))
         self.actions = []
         self.char = char
         self.index = 0
@@ -38,22 +40,33 @@ class MySprite(pygame.sprite.Sprite):
         self.dir = dir
         self.x = x
         self.y = y
-        self.prev_action = None  
+        self.prev_action = None
+        self.dialogues_dir = str(dialogues_path / self.char)
+        self.dialogue_no = 0
 
-    def play_dialogue(self, dialogue):
-        tlds = ["com.au", "co.uk", "com", "ca", "co.in", "ie", "co.za"]
-        myobj = gTTS(text=self.char + " said " + dialogue, lang=language, slow=False, tld=random.choice(tlds))
-        myobj.save("dialogue.mp3")
-        with audioread.audio_open('dialogue.mp3') as f:
-            totalsec = f.duration
+    def play_dialogue(self, line_no):
+        dialogue_path = self.dialogues_dir + "\\dialogue" + str(line_no) + ".mp3"
 
-        pygame.mixer.init()
-        pygame.mixer.music.load("dialogue.mp3")
-        pygame.mixer.music.set_volume(1)
-        pygame.mixer.music.play()
-        sleep(totalsec)
-        
-        pygame.mixer.music.unload()
+        try:
+            # Try playing the audio
+            with audioread.audio_open(dialogue_path) as f:
+                totalsec = f.duration
+
+            pygame.mixer.init()
+            pygame.mixer.music.load(dialogue_path)
+            pygame.mixer.music.set_volume(1)
+            pygame.mixer.music.play()
+            sleep(totalsec)
+            
+            pygame.mixer.music.unload()
+        except Exception as e:
+            print("ERROR: dialogue not found")
+
+            if not os.path.exists(dialogue_path):
+                print("Looks like the dialogues path does not exist. Check if dialogues are being generated properly and input path is correct")
+
+            print("Here is the exception that occured: ")
+            print(e)
 
         
     def movement_update(self, fps = FPS):
@@ -114,16 +127,14 @@ def animate(characters, SVs, extracted_weather):
 
     char_objects = dict()
 
-    for i, character in enumerate(characters):
-        dir = list(dir_list.keys())[i % 2]
-        char_objects[character] = MySprite(character, dir_list[dir] * ((i % 2) + 1), 480, dir)
+    for line_no, character in enumerate(characters):
+        dir = list(dir_list.keys())[line_no % 2]
+        char_objects[character] = MySprite(character, dir_list[dir] * ((line_no % 2) + 1), 480, dir)
 
     clock = pygame.time.Clock()
-    i = 1
     # svs is a list of lists. Each list refers to a line. Each line has a list of tuples if svos
-    for line in SVs:
-        print("\n-----LINE ", i, "-----\n")
-        i += 1
+    for line_no, line in enumerate(SVs):
+        print("\n-----LINE ", line_no, "-----\n")
         flag = 0
         dialogues = {}
         characters_in_line = [sv[0] for sv in line]
@@ -180,6 +191,6 @@ def animate(characters, SVs, extracted_weather):
             if flag:
                 for character, dialogue in dialogues.items():
                     if dialogue != "":
-                        char_objects[character].play_dialogue(dialogue)
+                        char_objects[character].play_dialogue(line_no)
                         print("dialogue played")
                         dialogues[character] = ""

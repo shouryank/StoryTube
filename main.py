@@ -5,6 +5,10 @@ from PIL import ImageTk, Image
 from coref_resolution import coref
 from utils import char_action_set_getter
 from clausIE import refactor_sv, sv, weather_extraction
+from dialogue import dialogue_maker_file
+import os
+from pathlib import Path
+from constants import dialogues_path
 import sys
 from animation import animate
 
@@ -13,7 +17,7 @@ def pipeline():
     # Default story:
     """
         A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking in the opposite direction. It ran. The dog said "Hello world, the cat is going to die hahaha".
-        A detective was running on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking". The ninja boy said "Catch me if you can".
+        A detective was running on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking. Now die.". The ninja boy said "Catch me if you can".
     """
     text = txt1.get(1.0, "end-1c")
 
@@ -28,6 +32,26 @@ def pipeline():
 
     # Assign char to action
     svs, characters = refactor_sv.refactor_sv(svs)
+
+    # Delete all saved dialogues
+    dialogue_maker_file.delete_all_dialogues(dialogues_path)
+
+    # Save dialogues to be used
+    line_no = 0
+    for line in svs:
+
+        for SV in line:
+            if len(SV) != 3 or SV[1] not in ["said", "say"]:
+                continue
+
+            character = SV[0]
+            dialogue = SV[2]
+
+            dialogue_maker_file.create_dialogue(char=character, line_no=line_no, dialogue=dialogue)
+
+            break
+
+        line_no += 1
 
     animate.animate(characters, svs, weather)
 
