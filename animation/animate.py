@@ -1,6 +1,7 @@
 # from numpy import character
 import pygame
 import glob
+import random
 from time import sleep
 from gtts import gTTS
 import audioread
@@ -40,7 +41,8 @@ class MySprite(pygame.sprite.Sprite):
         self.prev_action = None  
 
     def play_dialogue(self, dialogue):
-        myobj = gTTS(text=self.char + " said " + dialogue, lang=language, slow=False)
+        tlds = ["com.au", "co.uk", "com", "ca", "co.in", "ie", "co.za"]
+        myobj = gTTS(text=self.char + " said " + dialogue, lang=language, slow=False, tld=random.choice(tlds))
         myobj.save("dialogue.mp3")
         with audioread.audio_open('dialogue.mp3') as f:
             totalsec = f.duration
