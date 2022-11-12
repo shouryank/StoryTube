@@ -5,7 +5,7 @@ from PIL import ImageTk, Image
 from coref_resolution import coref
 from utils import char_action_set_getter
 from clausIE import refactor_sv, sv, weather_extraction
-
+import sys
 from animation import animate
 
 def pipeline():
@@ -53,6 +53,8 @@ def clicked_help():
 # CHAR ACTION SET:  {'adventure girl': ['dead', 'idle', 'jump', 'melee', 'run', 'say', 'shoot', 'slide'], 'boy': ['dead', 'hurt', 'idle', 'jump', 'run', 'say', 'slide'], 'cat': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'detective': ['dead', 'idle', 'jump', 'run', 'say', 'slide'], 'dino': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'dog': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'girl': ['dead', 'Idle', 'Jump', 'Run', 'say', 'Walk'], 'jack-o-latern': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'kid': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'knight': ['attack', 'dead', 'idle', 'jump', 'jumpattack', 'run', 'say', 'walk'], 'ninja boy': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'ninja girl': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'robot': ['dead', 'idle', 'jump', 'jumpmelee', 'jumpshoot', 'melee', 'run', 'runshoot', 'say', 'shoot', 'slide'], 'santa': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'zombie female': ['attack', 'dead', 'idle', 'say', 'walk'], 'zombie male': ['attack', 'dead', 'idle', 'say', 'walk']}
 
 
+
+
 root = tk.Tk()
 root.title("StoryTube")
 
@@ -63,12 +65,25 @@ label.place(x = 0,y = 0)
 lbl1 = Label(root, bg = "#eae9d2", text="Welcome to StoryTube !!\n\n").grid(column=0, row=0)
 lbl2 = Label(root, bg = "#eae9d2", text="Write down your amazing story below using the available characters :) \n\n").grid(column=0, row=2)
 
-txt1 = Text(root, height = 10, width = 80, bg = "light yellow")
+txt1 = Text(root, height = 5, width = 80, bg = "light yellow")
 txt1.grid(column=0, row=3)
 
 print(txt1.get(1.0, "end-1c"))
 
 lbl3 = Label(root, bg = "#eae9d2", text="\n").grid(column=0, row=4)
+
+
+# separator = ttk.Separator(root, orient='vertical')
+# separator.place(relx=0.5, rely=0, relwidth=0.1, relheight=1)
+
+txtbx = Text(root, height = 20, width = 80, bg = "light yellow")
+txtbx.grid(column=0, row=10)
+
+def redirector(inputStr):     
+    txtbx.insert(INSERT, inputStr) 
+
+sys.stdout.write = redirector
+
 btn1 = Button(root, bg = "#eae9d2", text="Submit story",fg="red", command=pipeline).grid(column=0, row=6)
 lbl4 = Label(root, bg = "#eae9d2", text="\n").grid(column=0, row=7)
 
@@ -77,9 +92,5 @@ img_label = Label(image=click_btn)
 btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).grid(column=0, row=8)
 
 lbl5 = Label(root, bg = "#eae9d2", text="\n\n").grid(column=0, row=9)
-
-# separator = ttk.Separator(root, orient='vertical')
-# separator.place(relx=0.5, rely=0, relwidth=0.1, relheight=1)
-
 
 root.mainloop()

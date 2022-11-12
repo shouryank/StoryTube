@@ -23,7 +23,7 @@ def resolve_coref(text):
 
     # print('\n\n') #Newline
 
-    # print('Coref resolved: ', corefed_text)  # resolved text
+    print('Coref resolved: ', corefed_text)  # resolved text
 
     # print("---------------END OF COREF MODULE---------------")
 
