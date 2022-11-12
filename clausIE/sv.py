@@ -3,7 +3,7 @@ from spacy.matcher import Matcher
 import claucy
 import re
 from spacy.language import Language
-from split_text_to_sentences import split_into_sentences
+from .split_text_to_sentences import split_into_sentences
 
 '''Add logic to ignore dialogues in NLP'''
 nlp = spacy.load("en_core_web_sm")
