@@ -30,6 +30,9 @@ def create_dialogue(char, line_no, dialogue):
 
 def delete_all_dialogues(dialogue_dir):
 # Delete all directories and files in dialogues/ directory
+    if not os.path.exists(dialogue_dir):
+        return
+        
     for filename in os.listdir(dialogue_dir):
         file_path = os.path.join(dialogue_dir, filename)
         try:

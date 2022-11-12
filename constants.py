@@ -8,4 +8,4 @@ actions_movement = {'die' : 0, 'fall' : 0, 'hurt' : 0, 'idle' : 0, 'jump' : 1, '
 main_path = Path(__file__).parent
 
 # Path to dialogues
-dialogues_path = Path(main_path / "dialogues")
+dialogues_path = Path(main_path / "animation"/ "dialogues")

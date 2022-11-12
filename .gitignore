@@ -1,13 +1,7 @@
-allen_coref
-dragon3
-dialogue.mp3
-clausIE/__pycache__/
-example video output
-venv
-
 # Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
+__pycache__
+**/__pycache__
+**/*.py[cod]
 
 # C extensions
 *.so
@@ -30,3 +24,11 @@ var/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+
+allen_coref
+dragon3
+dialogue.mp3
+clausIE/__pycache__/
+example video output
+venv
+*.mp3
