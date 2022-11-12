@@ -4,4 +4,6 @@ allennlp==2.1.0
 allennlp-models
 pygame
 nltk
+gtts
+audioread
 git+https://github.com/mmxgn/spacy-clausie.git

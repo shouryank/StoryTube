@@ -3,7 +3,7 @@ from spacy.matcher import Matcher
 import claucy
 import re
 from spacy.language import Language
-from split_text_to_sentences import split_into_sentences
+from .split_text_to_sentences import split_into_sentences
 
 '''Add logic to ignore dialogues in NLP'''
 nlp = spacy.load("en_core_web_sm")
@@ -58,7 +58,7 @@ def extract_sv(text, coref_text):
     # Iterate through each line
     for line, dialogue_line in zip(coref_sentences, raw_sentences):
         # Subsititute dialogue        
-        re.sub(r"([\"\'])(?:(?=(\\?))\2.)*?\1", " ", line)
+        line = re.sub(r"([\"\'])(?:(?=(\\?))\2.)*?\1", " ", line)
 
         # Append the list of SVs for that line
         SV = []
@@ -91,5 +91,5 @@ def extract_sv(text, coref_text):
 
 if __name__ == "__main__":
     # Test for the module
-    extract_sv('A detective was walking on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking. Now die.".', 
-    'A detective was walking on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attcking. Now die.".')
+    extract_sv('The detective said "You are caught for attacking. Now die.". The ninja boy said "Catch me if you can".', 
+    'The detective said  . The ninja boy said  .')
