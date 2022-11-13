@@ -7,7 +7,7 @@ from constants import actions_movement
 from utils import char_action_set_getter
 from pathlib import Path
 import os
-from constants import dialogues_path
+from constants import dialogues_path, main_path
 
 language = 'en'
 
@@ -15,8 +15,8 @@ SIZE = WIDTH, HEIGHT = 1280, 720 #the width and height of our screen
 FPS = 7 #Frames per second
 
 screen = pygame.display.set_mode(SIZE)
-character_path = r'assets/characters/'
-weather_path = r'assets/weather/'
+character_path = str(main_path / 'assets/characters')
+weather_path = str(main_path / 'assets/weather')
 
 dir_list = {'r' : 200, 'l' : 400} #moving towards which direction
 
@@ -45,13 +45,18 @@ class MySprite(pygame.sprite.Sprite):
         self.dialogue_no = 0
 
     def play_dialogue(self, line_no):
-        dialogue_path = self.dialogues_dir + "\\dialogue" + str(line_no) + ".mp3"
+        dialogue_path = self.dialogues_dir + "/dialogue" + str(line_no) + ".mp3"
 
         try:
             # Try playing the audio
             with audioread.audio_open(dialogue_path) as f:
                 totalsec = f.duration
+        except Exception as e:
+            print("Error: audioread failed for dialogue path", dialogue_path)
+            print(e)
+            exit(1)
 
+        try:
             pygame.mixer.init()
             pygame.mixer.music.load(dialogue_path)
             pygame.mixer.music.set_volume(1)
@@ -60,7 +65,7 @@ class MySprite(pygame.sprite.Sprite):
             
             pygame.mixer.music.unload()
         except Exception as e:
-            print("ERROR: dialogue not found")
+            print("ERROR: dialogue file with path", dialogue_path)
 
             if not os.path.exists(dialogue_path):
                 print("Looks like the dialogues path does not exist. Check if dialogues are being generated properly and input path is correct")
@@ -82,7 +87,7 @@ class MySprite(pygame.sprite.Sprite):
         flag = 0
         if action not in self.images or len(self.images[action]) == 0:
             print("Adding images for char ", self.char, " for action ", action)
-            self.images[action] = [pygame.transform.scale(pygame.image.load(img) , (200,200)) for img in glob.glob("assets\\characters\\" + self.char + "\\" + action + "\\*.png")]
+            self.images[action] = [pygame.transform.scale(pygame.image.load(img) , (200,200)) for img in glob.glob(str(main_path) + "/assets/characters/" + self.char + "/" + action + "/*.png")]
 
         if self.index >= len(self.images[action]):
             flag = 1
@@ -110,8 +115,9 @@ class MySprite(pygame.sprite.Sprite):
             return
         try:
             self.image = self.images[self.prev_action][-1]
-        except:
-            print("character: ", self.char)
+        except Exception as e:
+            print("previous action failed to load for character: ", self.char)
+            print(e)
             exit(1)
 
         print("PLAYING PREVIOUS ACTION ", self.prev_action, " OF ", self.char, " IMAGE ", self.image)
@@ -120,7 +126,7 @@ class MySprite(pygame.sprite.Sprite):
         
 
 def animate(characters, SVs, extracted_weather):
-    bg = pygame.transform.scale(pygame.image.load(weather_path + extracted_weather + '.jpg') , SIZE)
+    bg = pygame.transform.scale(pygame.image.load(weather_path + '/' + extracted_weather + '.jpg') , SIZE)
 
     pygame.init()
     pygame.display.set_caption("Trace")

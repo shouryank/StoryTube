@@ -12,6 +12,8 @@ from constants import dialogues_path
 import sys
 from animation import animate
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 def pipeline():
     #extracting the story from the gui
     # Default story:
@@ -32,6 +34,8 @@ def pipeline():
 
     # Assign char to action
     svs, characters = refactor_sv.refactor_sv(svs)
+
+    redirector(svs.__repr__())
 
     # Delete all saved dialogues
     dialogue_maker_file.delete_all_dialogues(dialogues_path)
@@ -82,7 +86,7 @@ def clicked_help():
 root = tk.Tk()
 root.title("StoryTube")
 root.geometry("800x533")
-bg = ImageTk.PhotoImage(Image.open('assets\\background.png'))
+bg = ImageTk.PhotoImage(Image.open('assets/background.png'))
 label = Label( root, image = bg)
 label.place(relx = 0, rely = 0)
 
@@ -106,11 +110,11 @@ def redirector(inputStr):
     txtbx.insert(INSERT, inputStr) 
     #txtbx.delete(0, END) clear tb after each story
 
-sys.stdout.write = redirector
+# sys.stdout.write = redirector
 
 btn1 = Button(root, bg = "#eae9d2", text="Submit story",fg="red", command=pipeline).place(x=90, y=420)
 
-click_btn = PhotoImage(file='assets\help_icon.png')
+click_btn = PhotoImage(file='assets/help_icon.png')
 img_label = Label(image=click_btn)
 btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).place(x=100, y=450)
 

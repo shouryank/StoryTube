@@ -1,7 +1,9 @@
 import glob
 import os
+from pathlib import Path
+from constants import main_path
 
-path = r'D:\Documents\PESU\capstone\code\StoryTube\pygame\dog\\'
+path = str(main_path / 'assets' / 'dog')
 
 # search text files starting with the word "sales"
 pattern = path + "dead" + "*.png"

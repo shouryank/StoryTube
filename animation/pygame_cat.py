@@ -8,7 +8,7 @@ class MySprite(pygame.sprite.Sprite):
     def __init__(self):
         super(MySprite, self).__init__()
  
-        self.images = [pygame.image.load(img) for img in glob.glob("Storytube\\pygame\\cat\\*.png")]
+        self.images = [pygame.image.load(img) for img in glob.glob("Storytube/pygame/cat/*.png")]
         self.index = 0
         self.rect = pygame.Rect(5, 5, 150, 198)
  
