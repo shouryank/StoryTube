@@ -7,5 +7,8 @@ actions_movement = {'die' : 0, 'fall' : 0, 'hurt' : 0, 'idle' : 0, 'jump' : 1, '
 # Path of storytube
 main_path = Path(__file__).parent
 
+# Path to screenshots folder
+screenshots_path = main_path / "screenshots"
+
 # Path to dialogues
-dialogues_path = Path(main_path / "animation"/ "dialogues")
+dialogues_path = main_path / "animation"/ "dialogues"

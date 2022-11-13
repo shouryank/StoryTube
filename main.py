@@ -3,14 +3,16 @@ from tkinter import ttk
 from tkinter import *
 from PIL import ImageTk, Image
 from coref_resolution import coref
-from utils import char_action_set_getter
+from utils import char_action_set_getter, delete_files
 from clausIE import refactor_sv, sv, weather_extraction
 from dialogue import dialogue_maker_file
 import os, glob
 # from pathlib import Path
-from constants import dialogues_path
+from constants import dialogues_path, screenshots_path
 import sys
 from animation import animate
+from constants import main_path
+
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -38,7 +40,10 @@ def pipeline():
     redirector(svs.__repr__())
 
     # Delete all saved dialogues
-    dialogue_maker_file.delete_all_dialogues(dialogues_path)
+    delete_files.delete_all_files(dialogues_path)
+
+    # Delete all screenshots
+    delete_files.delete_all_files(screenshots_path)
 
     # Save dialogues to be used
     line_no = 0
@@ -58,6 +63,8 @@ def pipeline():
         line_no += 1
 
     animate.animate(characters, svs, weather)
+
+    # display_pics()
 
 
 def clicked_help():
@@ -81,22 +88,45 @@ def clicked_help():
 # CHAR ACTION SET:  {'adventure girl': ['dead', 'idle', 'jump', 'melee', 'run', 'say', 'shoot', 'slide'], 'boy': ['dead', 'hurt', 'idle', 'jump', 'run', 'say', 'slide'], 'cat': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'detective': ['dead', 'idle', 'jump', 'run', 'say', 'slide'], 'dino': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'dog': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'girl': ['dead', 'Idle', 'Jump', 'Run', 'say', 'Walk'], 'jack-o-latern': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'kid': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'knight': ['attack', 'dead', 'idle', 'jump', 'jumpattack', 'run', 'say', 'walk'], 'ninja boy': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'ninja girl': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'robot': ['dead', 'idle', 'jump', 'jumpmelee', 'jumpshoot', 'melee', 'run', 'runshoot', 'say', 'shoot', 'slide'], 'santa': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'zombie female': ['attack', 'dead', 'idle', 'say', 'walk'], 'zombie male': ['attack', 'dead', 'idle', 'say', 'walk']}
 
 
+# def display_pics():
+#     i, temp_x, temp_y = 0, 250, 150
+
+#     for img in glob.glob(str(screenshots_path / "*.jpg")):
+#         print(img)
+#         pic = ImageTk.PhotoImage((Image.open(img)).resize((200,125)))
+#         label= Label(root, image = pic)
+
+#         if i%2:
+#             label.place(x=1050+temp_x, y=temp_y)
+#             temp_y += 150
+#         else:
+#             label.place(x=1050, y=temp_y)
+
+#         if i==5: break   
+#         i += 1
 
 
 root = tk.Tk()
 root.title("StoryTube")
-root.geometry("800x533")
+root.geometry("2000x1333")
+
 bg = ImageTk.PhotoImage(Image.open('assets/background.png'))
 label = Label( root, image = bg)
 label.place(relx = 0, rely = 0)
 
 # FIRST PARTITION
 
-lbl1 = Label(root, bg = "#eae9d2", text="Welcome to StoryTube !!\n\n").place(x=10, y=10)
-lbl2 = Label(root, bg = "#eae9d2", text="Write down your amazing story below :) \n\n").place(x=10, y=40)
+lbl1 = Label(root, bg = "#eae9d2", text="Welcome to StoryTube !!\n\n")
+lbl1.place(x=100, y=10)
+lbl1.config(font=('Times New Roman',20))
+lbl2 = Label(root, bg = "#eae9d2", text="Write down your amazing story below :) \n\n")
+lbl2.place(x=90, y=70)
+lbl2.config(font=('Times New Roman',15))
 
-txt1 = Text(root, height = 20, width = 30, bg = "light yellow")
-txt1.place(x=10, y=70)
+
+txt1 = Text(root, height = 25, width = 45, bg = "light yellow")
+txt1.place(x=30, y=150)
+txt1.config(font=('Times New Roman',15))
 
 print(txt1.get(1.0, "end-1c"))
 
@@ -105,11 +135,13 @@ ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.
 
 # SECOND PARTITION
 
-lbl3 = Label(root, bg = "#eae9d2", text="Intermediate Steps to the Animation\n").place(x=300, y=40)
+lbl3 = Label(root, bg = "#eae9d2", text="Intermediate Steps to the Animation\n")
+lbl3.place(x=625, y=40)
+lbl3.config(font=('Times New Roman',15))
 
-txtbx = Text(root, height = 20, width = 33, bg = "light yellow")
-txtbx.place( x = 280, y = 70)
-txtbx.config(font=('Helvatical',10))
+txtbx = Text(root, height = 25, width = 45, bg = "light yellow")
+txtbx.place( x = 550, y = 150)
+txtbx.config(font=('Times New Roman',15))
 
 def redirector(inputStr):     
     txtbx.insert(INSERT, inputStr) 
@@ -117,14 +149,14 @@ def redirector(inputStr):
 
 # sys.stdout.write = redirector
 
-btn1 = Button(root, bg = "#eae9d2", text="Submit story",fg="red", command=pipeline).place(x=90, y=420)
+btn1 = Button(root, bg = "#eae9d2", text="Submit story",fg="red", command=pipeline).place(x=225, y=725)
 
 click_btn = PhotoImage(file='assets/help_icon.png')
 img_label = Label(image=click_btn)
-btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).place(x=100, y=450)
+btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).place(x=235, y=770)
 
 # btn3 not working idk why
-# btn3 = Button(root, bg = "#eae9d2", text="Clear Text",fg="red",command= txtbx.delete("1.0","end")).place(x=370, y=450)
+btn3 = Button(root, bg = "#eae9d2", text="Clear Text",fg="red",command= txtbx.delete("1.0","end")).place(x=600, y=725)
 
 ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.Separator, takefocus= 1, cursor='man').place(relx = 0.67, rely = 0, relheight=1)
 
@@ -132,30 +164,26 @@ ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.
 # THIRD PARTITION
 
 
-lbl4 = Label(root, bg = "#eae9d2", text="Frames of the output animation\n").place(x=580, y=20)
+lbl4 = Label(root, bg = "#eae9d2", text="Frames of the output animation\n")
+lbl4.place(x=1150, y=40)
+lbl4.config(font=('Times New Roman',15))
 
-# Need to add images dispaying code
+i, temp_x, temp_y = 0, 250, 150
 
-# i, temp_x, temp_y = 0, 0, 0
-# labels = [] 
-# for img in glob.glob("screenshots/*.jpg"):
-#     print(i)
-#     if i==5: break
-#     img = Image.open(img).resize((80,80))
-#     img = ImageTk.PhotoImage(img)
-#     labels.append(Label(root, image = img))
-#     if i%2:
-#         labels[i] = Label(root, image = img)
-#         labels[i].place(x=550+temp_x, y=70+temp_y)
-#         temp_y += 100
-#         i += 1
-#         continue    
-#     labels[i] = Label(root, image = img)
-#     labels[i].place(x=550+temp_x, y=70+temp_y)
-#     temp_x += 100
-#     i += 1
-    
-# print(labels)
+for img in glob.glob(str(screenshots_path / "*.jpg")):
+    print(img)
+    pic = ImageTk.PhotoImage((Image.open(img)).resize((200,125)))
+    label_1= Label(root, image = pic)
+
+    if i%2:
+        label_1.place(x=1050+temp_x, y=temp_y)
+        temp_y += 150
+    else:
+        label_1.place(x=1050, y=temp_y)
+
+    if i==5: break   
+    i += 1
+
 
 
 root.mainloop()
