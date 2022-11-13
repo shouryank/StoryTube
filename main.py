@@ -6,8 +6,8 @@ from coref_resolution import coref
 from utils import char_action_set_getter
 from clausIE import refactor_sv, sv, weather_extraction
 from dialogue import dialogue_maker_file
-import os
-from pathlib import Path
+import os, glob
+# from pathlib import Path
 from constants import dialogues_path
 import sys
 from animation import animate
@@ -17,7 +17,7 @@ def pipeline():
     # Default story:
     """
         A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking in the opposite direction. It ran. The dog said "Hello world, the cat is going to die hahaha".
-        A detective was running on a sunnny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking. Now die.". The ninja boy said "Catch me if you can".
+        A detective was running on a sunny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking. Now die.". The ninja boy said "Catch me if you can".
     """
     text = txt1.get(1.0, "end-1c")
 
@@ -86,6 +86,8 @@ bg = ImageTk.PhotoImage(Image.open('assets\\background.png'))
 label = Label( root, image = bg)
 label.place(relx = 0, rely = 0)
 
+# FIRST PARTITION
+
 lbl1 = Label(root, bg = "#eae9d2", text="Welcome to StoryTube !!\n\n").place(x=10, y=10)
 lbl2 = Label(root, bg = "#eae9d2", text="Write down your amazing story below :) \n\n").place(x=10, y=40)
 
@@ -97,10 +99,13 @@ print(txt1.get(1.0, "end-1c"))
 ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.Separator, takefocus= 1, cursor='man').place(relx = 0.33, rely = 0, relheight=1)
 
 
+# SECOND PARTITION
+
 lbl3 = Label(root, bg = "#eae9d2", text="Intermediate Steps to the Animation\n").place(x=300, y=40)
 
-txtbx = Text(root, height = 20, width = 30, bg = "light yellow")
+txtbx = Text(root, height = 20, width = 33, bg = "light yellow")
 txtbx.place( x = 280, y = 70)
+txtbx.config(font=('Helvatical',10))
 
 def redirector(inputStr):     
     txtbx.insert(INSERT, inputStr) 
@@ -115,11 +120,39 @@ img_label = Label(image=click_btn)
 btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).place(x=100, y=450)
 
 # btn3 not working idk why
-btn3 = Button(root, bg = "#eae9d2", text="Clear Text",fg="red",command= txtbx.delete("1.0","end")).place(x=370, y=450)
-
+# btn3 = Button(root, bg = "#eae9d2", text="Clear Text",fg="red",command= txtbx.delete("1.0","end")).place(x=370, y=450)
 
 ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.Separator, takefocus= 1, cursor='man').place(relx = 0.67, rely = 0, relheight=1)
 
 
+# THIRD PARTITION
+
+
+lbl4 = Label(root, bg = "#eae9d2", text="Frames of the output animation\n").place(x=580, y=20)
+
+# Need to add images dispaying code
+
+# i, temp_x, temp_y = 0, 0, 0
+# labels = [] 
+# for img in glob.glob("screenshots/*.jpg"):
+#     print(i)
+#     if i==5: break
+#     img = Image.open(img).resize((80,80))
+#     img = ImageTk.PhotoImage(img)
+#     labels.append(Label(root, image = img))
+#     if i%2:
+#         labels[i] = Label(root, image = img)
+#         labels[i].place(x=550+temp_x, y=70+temp_y)
+#         temp_y += 100
+#         i += 1
+#         continue    
+#     labels[i] = Label(root, image = img)
+#     labels[i].place(x=550+temp_x, y=70+temp_y)
+#     temp_x += 100
+#     i += 1
+    
+# print(labels)
+
 
 root.mainloop()
+
