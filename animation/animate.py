@@ -111,16 +111,26 @@ class MySprite(pygame.sprite.Sprite):
         return flag
 
     def play_prev_frame(self):
-        if self.prev_action is None:
-            return
-        try:
-            self.image = self.images[self.prev_action][-1]
-        except Exception as e:
-            print("previous action failed to load for character: ", self.char)
-            print(e)
-            exit(1)
+        if self.prev_action is None or self.prev_action == 'idle':
+            # Play idle animation
+            try:
+                self.update('idle')
+            except Exception as e:
+                print("Idle action failed to load for character: ", self.char)
+                print(e)
+                exit(1)
 
-        print("PLAYING PREVIOUS ACTION ", self.prev_action, " OF ", self.char, " IMAGE ", self.image)
+            print("Playing idle action of", self.char)
+        else:
+            # Play previous animation's last frame
+            try:
+                self.image = self.images[self.prev_action][-1]
+            except Exception as e:
+                print("previous action failed to load for character: ", self.char)
+                print(e)
+                exit(1)
+
+            print("Playing previous action", self.prev_action, "of", self.char)
 
         self.movement_update(0)
         
