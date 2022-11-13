@@ -81,48 +81,45 @@ def clicked_help():
 
 root = tk.Tk()
 root.title("StoryTube")
-
+root.geometry("800x533")
 bg = ImageTk.PhotoImage(Image.open('assets\\background.png'))
 label = Label( root, image = bg)
-label.place(x = 0,y = 0)
+label.place(relx = 0, rely = 0)
 
-lbl1 = Label(root, bg = "#eae9d2", text="Welcome to StoryTube !!\n\n").grid(column=0, row=0)
-lbl2 = Label(root, bg = "#eae9d2", text="Write down your amazing story below using the available characters :) \n\n").grid(column=0, row=2)
+lbl1 = Label(root, bg = "#eae9d2", text="Welcome to StoryTube !!\n\n").place(x=10, y=10)
+lbl2 = Label(root, bg = "#eae9d2", text="Write down your amazing story below :) \n\n").place(x=10, y=40)
 
-txt1 = Text(root, height = 5, width = 80, bg = "light yellow")
-txt1.grid(column=0, row=3)
+txt1 = Text(root, height = 20, width = 30, bg = "light yellow")
+txt1.place(x=10, y=70)
 
 print(txt1.get(1.0, "end-1c"))
 
-lbl3 = Label(root, bg = "#eae9d2", text="\n").grid(column=0, row=4)
+ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.Separator, takefocus= 1, cursor='man').place(relx = 0.33, rely = 0, relheight=1)
 
 
-txtbx = Text(root, height = 20, width = 80, bg = "light yellow")
-txtbx.grid(column=0, row=10)
+lbl3 = Label(root, bg = "#eae9d2", text="Intermediate Steps to the Animation\n").place(x=300, y=40)
+
+txtbx = Text(root, height = 20, width = 30, bg = "light yellow")
+txtbx.place( x = 280, y = 70)
 
 def redirector(inputStr):     
     txtbx.insert(INSERT, inputStr) 
     #txtbx.delete(0, END) clear tb after each story
 
-
 sys.stdout.write = redirector
 
-btn1 = Button(root, bg = "#eae9d2", text="Submit story",fg="red", command=pipeline).grid(column=0, row=6)
-lbl4 = Label(root, bg = "#eae9d2", text="\n").grid(column=0, row=7)
+btn1 = Button(root, bg = "#eae9d2", text="Submit story",fg="red", command=pipeline).place(x=90, y=420)
 
 click_btn = PhotoImage(file='assets\help_icon.png')
 img_label = Label(image=click_btn)
-btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).grid(column=0, row=8)
+btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).place(x=100, y=450)
 
-lbl5 = Label(root, bg = "#eae9d2", text="\n\n").grid(column=0, row=9)
+# btn3 not working idk why
+btn3 = Button(root, bg = "#eae9d2", text="Clear Text",fg="red",command= txtbx.delete("1.0","end")).place(x=370, y=450)
 
-ttk.Separator(
-    master=root,
-    orient=VERTICAL,
-    style='red.TSeparator',
-    class_= ttk.Separator,
-    takefocus= 1,
-    cursor='man'
-).place(relx = 0.33, rely = 0, relheight=1)
+
+ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.Separator, takefocus= 1, cursor='man').place(relx = 0.67, rely = 0, relheight=1)
+
+
 
 root.mainloop()
