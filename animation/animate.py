@@ -130,6 +130,8 @@ def animate(characters, SVs, extracted_weather):
 
     pygame.init()
     pygame.display.set_caption("Trace")
+    
+    
 
     char_objects = dict()
 
@@ -184,6 +186,8 @@ def animate(characters, SVs, extracted_weather):
 
             pygame.display.update()
             clock.tick(FPS)
+
+            pygame.image.save(screen,"screenshots\screenshot"+ str(line_no) +".jpg")
 
             print("Dialogues: ", dialogues)
 
