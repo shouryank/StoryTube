@@ -13,6 +13,7 @@ import sys
 from animation import animate
 from constants import main_path
 
+NUM_LABELS = 6
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -64,7 +65,7 @@ def pipeline():
 
     animate.animate(characters, svs, weather)
 
-    # display_pics()
+    display_pics()
 
 
 def clicked_help():
@@ -87,24 +88,18 @@ def clicked_help():
 
 # CHAR ACTION SET:  {'adventure girl': ['dead', 'idle', 'jump', 'melee', 'run', 'say', 'shoot', 'slide'], 'boy': ['dead', 'hurt', 'idle', 'jump', 'run', 'say', 'slide'], 'cat': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'detective': ['dead', 'idle', 'jump', 'run', 'say', 'slide'], 'dino': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'dog': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'girl': ['dead', 'Idle', 'Jump', 'Run', 'say', 'Walk'], 'jack-o-latern': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'kid': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'knight': ['attack', 'dead', 'idle', 'jump', 'jumpattack', 'run', 'say', 'walk'], 'ninja boy': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'ninja girl': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'robot': ['dead', 'idle', 'jump', 'jumpmelee', 'jumpshoot', 'melee', 'run', 'runshoot', 'say', 'shoot', 'slide'], 'santa': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'zombie female': ['attack', 'dead', 'idle', 'say', 'walk'], 'zombie male': ['attack', 'dead', 'idle', 'say', 'walk']}
 
+pics = []
 
-# def display_pics():
-#     i, temp_x, temp_y = 0, 250, 150
+def display_pics():
+    images = [img for img in glob.glob(str(screenshots_path / "*.jpg"))]
+    labels = []
+    pics = []
 
-#     for img in glob.glob(str(screenshots_path / "*.jpg")):
-#         print(img)
-#         pic = ImageTk.PhotoImage((Image.open(img)).resize((200,125)))
-#         label= Label(root, image = pic)
-
-#         if i%2:
-#             label.place(x=1050+temp_x, y=temp_y)
-#             temp_y += 150
-#         else:
-#             label.place(x=1050, y=temp_y)
-
-#         if i==5: break   
-#         i += 1
-
+    for i in range(NUM_LABELS):
+        pic = ImageTk.PhotoImage((Image.open(images[i])).resize((200,125)))
+        labels[i] = Label(root, image = pic)
+        labels[i].pack()
+        pics.append(pic)
 
 root = tk.Tk()
 root.title("StoryTube")
@@ -170,21 +165,20 @@ lbl4.config(font=('Times New Roman',15))
 
 i, temp_x, temp_y = 0, 250, 150
 
-for img in glob.glob(str(screenshots_path / "*.jpg")):
-    print(img)
-    pic = ImageTk.PhotoImage((Image.open(img)).resize((200,125)))
-    label_1= Label(root, image = pic)
+labels = []
 
-    if i%2:
+# Create 6 empty labels
+for _ in range(NUM_LABELS):
+    label_1 = Label(root)
+    label_1.pack()
+    labels.append(label_1)
+
+    if i % 2:
         label_1.place(x=1050+temp_x, y=temp_y)
         temp_y += 150
     else:
         label_1.place(x=1050, y=temp_y)
 
-    if i==5: break   
     i += 1
 
-
-
 root.mainloop()
-
