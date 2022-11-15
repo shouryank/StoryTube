@@ -156,7 +156,6 @@ def animate(characters, SVs, extracted_weather):
             done[sv] = 0
 
         while not flag:
-            print("LINE ISSSSSSSS " , line)
             pygame.event.get()
 
             screen.fill((0,0,0))        

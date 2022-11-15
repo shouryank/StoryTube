@@ -24,7 +24,6 @@ def quote_merger(doc):
     with doc.retokenize() as retokenizer:
         for span in matched_spans:
             retokenizer.merge(span)
-            # print("@@@@@@ Spanned: ", [token for token in span], "######")
             
     return doc
 

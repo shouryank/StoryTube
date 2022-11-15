@@ -78,8 +78,6 @@ def pipeline():
 
     time_taken = end - start
 
-    print("\n\nEXECUTION FINISHED.\n TIME TAKEN: ", time_taken)
-
     redirector(svs.__repr__() + "\nEXECUTION FINISHED.\n TIME TAKEN: " + str(time_taken))
 
 
