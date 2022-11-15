@@ -132,10 +132,8 @@ def animate(characters, SVs, extracted_weather):
     bg = pygame.transform.scale(pygame.image.load(weather_path + '/' + extracted_weather + '.jpg') , SIZE)
 
     pygame.init()
-    pygame.display.set_caption("Trace")
+    pygame.display.set_caption("StoryTube")
     
-    
-
     char_objects = dict()
 
     for line_no, character in enumerate(characters):
