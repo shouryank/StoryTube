@@ -32,4 +32,4 @@ clausIE/__pycache__/
 example video output
 venv
 *.mp3
-*.jpg
+screenshots/*

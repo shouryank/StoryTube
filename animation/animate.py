@@ -89,6 +89,7 @@ class MySprite(pygame.sprite.Sprite):
         # Get images that are used to animate the given action
         flag = 0
         self.prev_action = action
+
         if action not in self.images or len(self.images[action]) == 0:
             print("Adding images for char ", self.char, " for action ", action)
             self.images[action] = [pygame.transform.scale(pygame.image.load(img) , (200,200)) for img in glob.glob(str(main_path) + "/assets/characters/" + self.char + "/" + action + "/*.png")]
@@ -120,7 +121,7 @@ class MySprite(pygame.sprite.Sprite):
             self.play_prev_frame()
         
 
-        print("self.index: ", max(self.index - 1, 0))
+        print("self.index: ", max(self.index - 1, 0), "for char and action: ", self.char, action)
 
         return flag
 
@@ -132,7 +133,7 @@ class MySprite(pygame.sprite.Sprite):
             if self.prev_action is not None:
                 self.image = self.images[self.prev_action][-1]
 
-                self.movement_update(0)
+                self.movement_update(0, 0, 0)
             elif char_in_scene:
                 print("Loading idle action for character: ", self.char)
                 self.update('idle')
@@ -149,8 +150,10 @@ def animate(characters, SVs, extracted_weather):
     
     char_objects = dict()
 
+    dir_keys = list(dir_list.keys())
+
     for line_no, character in enumerate(characters):
-        dir = list(dir_list.keys())[line_no % 2]
+        dir = dir_keys[line_no % 2]
         char_objects[character] = MySprite(character, dir_list[dir] * ((line_no % 2) + 1), 480, dir)
 
     clock = pygame.time.Clock()
@@ -173,7 +176,7 @@ def animate(characters, SVs, extracted_weather):
             screen.blit(bg, (0, 0))
 
             for sv in line:
-
+                print("Animation sv: ", sv)
                 character = sv[0]
                 action = sv[1]
                 dialogue = ""
@@ -188,6 +191,7 @@ def animate(characters, SVs, extracted_weather):
                         char_objects[char].play_prev_frame(char_in_scene=False)
 
                 if done[sv]:
+                    char_objects[character].play_prev_frame(char_in_scene=True)
                     continue
 
                 if action not in char_action_set[character]:
