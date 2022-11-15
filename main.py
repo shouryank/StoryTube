@@ -24,6 +24,8 @@ def pipeline():
     """
         A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking. It ran. The dog said "Hello world, the cat is going to die hahaha".
         this is sus : A detective was running on a sunny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking. Now die.". The ninja boy said "Catch me if you can".
+        A boy is walking on a rainy day. The ninja boy attacks him. He runs for his life. The boy is now dead. The male zombie said "Now its time for revenge and to kill ugwal".
+    
     """
     txtbx.delete("1.0", "end")
 
