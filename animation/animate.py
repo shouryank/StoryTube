@@ -74,12 +74,15 @@ class MySprite(pygame.sprite.Sprite):
             print(e)
 
         
-    def movement_update(self, fps = FPS):
+    def movement_update(self, x_speed, y_speed, fps = FPS):
         if self.dir == 'r':                        
-            self.x += fps
+            self.x += x_speed
+            self.y += y_speed
         else:
             self.image = pygame.transform.flip(self.image, True, False)
             self.x -= fps
+            self.y += y_speed
+
         screen.blit(self.image, (self.x, self.y))
  
     def update(self, action):
@@ -99,9 +102,19 @@ class MySprite(pygame.sprite.Sprite):
             self.image = self.images[action][self.index]
             self.index += 1
             if action in actions_movement:
-                self.movement_update(FPS if actions_movement[action] else 0)
+                fps = FPS if actions_movement[action] else 0
+                x, y = 0, 0
+                if actions_movement[action] == 1:
+                    x = fps
+                elif actions_movement[action] == 2:
+                    if self.index >= len(self.images[action]) // 2:
+                        y = fps
+                    else:
+                        y = -fps
+
+                self.movement_update(x, y, fps)
             else:
-                self.movement_update(0)
+                self.movement_update(0, 0, 0)
         else:
             self.prev_action = action
             self.play_prev_frame()
@@ -120,7 +133,7 @@ class MySprite(pygame.sprite.Sprite):
                 self.image = self.images[self.prev_action][-1]
 
                 self.movement_update(0)
-            else:
+            elif char_in_scene:
                 print("Loading idle action for character: ", self.char)
                 self.update('idle')
         except Exception as e:
