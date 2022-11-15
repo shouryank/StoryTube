@@ -7,7 +7,7 @@ from utils import char_action_set_getter, delete_files
 from clausIE import refactor_sv, sv, weather_extraction
 from dialogue import dialogue_maker_file
 import os, glob
-# from pathlib import Path
+from pathlib import Path
 from constants import dialogues_path, screenshots_path
 import sys
 from animation import animate
@@ -153,15 +153,12 @@ txtbx.config(font=('Times New Roman',15))
 
 def redirector(inputStr):     
     txtbx.insert(INSERT, inputStr) 
-    #txtbx.delete(0, END) clear tb after each story
-
-# sys.stdout.write = redirector
 
 btn1 = Button(root, bg = "#eae9d2", text="Submit story",fg="red", command=pipeline).place(x=225, y=725)
 
 click_btn = PhotoImage(file='assets/help_icon.png')
 img_label = Label(image=click_btn)
-btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).place(x=235, y=770)
+btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).place(x=235, y=760)
 
 ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.Separator, takefocus= 1, cursor='man').place(relx = 0.67, rely = 0, relheight=1)
 
@@ -172,22 +169,5 @@ ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.
 lbl4 = Label(root, bg = "#eae9d2", text="Frames of the output animation\n")
 lbl4.place(x=1150, y=40)
 lbl4.config(font=('Times New Roman',15))
-
-# i, temp_x, temp_y = 0, 250, 150
-
-# labels = []
-
-# # Create 6 empty labels
-# for _ in range(NUM_LABELS):
-#     label_1 = Label(root)
-#     labels.append(label_1)
-
-#     if i % 2:
-#         label_1.place(x=1050+temp_x, y=temp_y)
-#         temp_y += 150
-#     else:
-#         label_1.place(x=1050, y=temp_y)
-
-#     i += 1
 
 root.mainloop()
