@@ -171,7 +171,7 @@ ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.
 
 lbl4 = Label(root, bg = "#eae9d2", text="Frames of the output animation\n")
 lbl4.place(x=1150, y=40)
-# lbl4.config(font=('Times New Roman',15))
+lbl4.config(font=('Times New Roman',15))
 
 # i, temp_x, temp_y = 0, 250, 150
 
