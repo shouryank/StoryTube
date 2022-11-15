@@ -52,9 +52,9 @@ def extract_sv(text, coref_text):
     raw_sentences = split_into_sentences(text)
     coref_sentences = split_into_sentences(coref_text)
 
-    print(raw_sentences, end = "\nUNGABUNGA\n")
-    print(coref_sentences, end = "\nUNGABUNGA\n")
-
+    print(raw_sentences)
+    print(coref_sentences)
+    print("SVs: ")
     # Iterate through each line
     for line, dialogue_line in zip(coref_sentences, raw_sentences):
         # Subsititute dialogue        
@@ -63,6 +63,7 @@ def extract_sv(text, coref_text):
         # Append the list of SVs for that line
         SV = []
         SV += get_sv_from_line(line)
+        print(SV)
 
         # If empty line or no SV returned, skip
         if not line or not SV:
@@ -91,5 +92,4 @@ def extract_sv(text, coref_text):
 
 if __name__ == "__main__":
     # Test for the module
-    extract_sv('The detective said "You are caught for attacking. Now die.". The ninja boy said "Catch me if you can".', 
-    'The detective said  . The ninja boy said  .')
+    extract_sv('the boy is dead.', 'the boy is dead.')

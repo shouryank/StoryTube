@@ -85,6 +85,7 @@ class MySprite(pygame.sprite.Sprite):
     def update(self, action):
         # Get images that are used to animate the given action
         flag = 0
+        self.prev_action = action
         if action not in self.images or len(self.images[action]) == 0:
             print("Adding images for char ", self.char, " for action ", action)
             self.images[action] = [pygame.transform.scale(pygame.image.load(img) , (200,200)) for img in glob.glob(str(main_path) + "/assets/characters/" + self.char + "/" + action + "/*.png")]
@@ -110,29 +111,21 @@ class MySprite(pygame.sprite.Sprite):
 
         return flag
 
-    def play_prev_frame(self):
-        if self.prev_action is None or self.prev_action == 'idle':
-            # Play idle animation
-            try:
-                self.update('idle')
-            except Exception as e:
-                print("Idle action failed to load for character: ", self.char)
-                print(e)
-                exit(1)
+    def play_prev_frame(self, char_in_scene=False):
+        print("Playing previous action", self.prev_action, "of", self.char)
 
-            print("Playing idle action of", self.char)
-        else:
-            # Play previous animation's last frame
-            try:
+        # Play previous animation's last frame
+        try:
+            if self.prev_action is not None:
                 self.image = self.images[self.prev_action][-1]
-            except Exception as e:
-                print("previous action failed to load for character: ", self.char)
-                print(e)
-                exit(1)
 
-            print("Playing previous action", self.prev_action, "of", self.char)
-
-        self.movement_update(0)
+                self.movement_update(0)
+            else:
+                print("Loading idle action for character: ", self.char)
+                self.update('idle')
+        except Exception as e:
+            print("previous action failed to load for character: ", self.char)
+            print(e)
         
 
 def animate(characters, SVs, extracted_weather):
@@ -180,19 +173,21 @@ def animate(characters, SVs, extracted_weather):
 
                 dialogues[character] = dialogue
 
+                for char in char_objects:
+                    if char not in characters_in_line:
+                        char_objects[char].play_prev_frame(char_in_scene=False)
+
                 if done[sv]:
                     continue
 
-                if character not in char_action_set or action not in char_action_set[character]:
+                if action not in char_action_set[character]:
                     done[sv] = 1
-                    char_objects[character].play_prev_frame()
+
+                    char_objects[character].play_prev_frame(char_in_scene=True)
+
                     continue
 
                 done[sv] = char_objects[character].update(action)
-
-                for char in char_objects:
-                    if char not in characters_in_line:
-                        char_objects[char].play_prev_frame()
 
             pygame.image.save(screen,"screenshots\screenshot"+ str(line_no) +".jpg")
             pygame.display.update()
