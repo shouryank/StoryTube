@@ -194,10 +194,11 @@ def animate(characters, SVs, extracted_weather):
                     if char not in characters_in_line:
                         char_objects[char].play_prev_frame()
 
+            pygame.image.save(screen,"screenshots\screenshot"+ str(line_no) +".jpg")
             pygame.display.update()
             clock.tick(FPS)
 
-            pygame.image.save(screen,"screenshots\screenshot"+ str(line_no) +".jpg")
+           
 
             print("Dialogues: ", dialogues)
 

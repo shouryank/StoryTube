@@ -13,7 +13,8 @@ import sys
 from animation import animate
 from constants import main_path
 
-NUM_LABELS = 6
+NUM_LABELS = min(len([name for name in os.listdir(screenshots_path) \
+    if os.path.isfile(os.path.join(screenshots_path, name))]), 6)
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -21,9 +22,11 @@ def pipeline():
     #extracting the story from the gui
     # Default story:
     """
-        A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking in the opposite direction. It ran. The dog said "Hello world, the cat is going to die hahaha".
-        A detective was running on a sunny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking. Now die.". The ninja boy said "Catch me if you can".
+        A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking. It ran. The dog said "Hello world, the cat is going to die hahaha".
+        this is sus : A detective was running on a sunny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking. Now die.". The ninja boy said "Catch me if you can".
     """
+    txtbx.delete("1.0", "end")
+
     text = txt1.get(1.0, "end-1c")
 
     # Coref resolution
@@ -88,22 +91,32 @@ def clicked_help():
 
 # CHAR ACTION SET:  {'adventure girl': ['dead', 'idle', 'jump', 'melee', 'run', 'say', 'shoot', 'slide'], 'boy': ['dead', 'hurt', 'idle', 'jump', 'run', 'say', 'slide'], 'cat': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'detective': ['dead', 'idle', 'jump', 'run', 'say', 'slide'], 'dino': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'dog': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'girl': ['dead', 'Idle', 'Jump', 'Run', 'say', 'Walk'], 'jack-o-latern': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'kid': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'knight': ['attack', 'dead', 'idle', 'jump', 'jumpattack', 'run', 'say', 'walk'], 'ninja boy': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'ninja girl': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'robot': ['dead', 'idle', 'jump', 'jumpmelee', 'jumpshoot', 'melee', 'run', 'runshoot', 'say', 'shoot', 'slide'], 'santa': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'zombie female': ['attack', 'dead', 'idle', 'say', 'walk'], 'zombie male': ['attack', 'dead', 'idle', 'say', 'walk']}
 
-pics = []
-
 def display_pics():
+
+    temp_x, temp_y = 250, 150
+
     images = [img for img in glob.glob(str(screenshots_path / "*.jpg"))]
     labels = []
     pics = []
 
     for i in range(NUM_LABELS):
         pic = ImageTk.PhotoImage((Image.open(images[i])).resize((200,125)))
-        labels.append(Label(root, image = pic))
+        labels.append(Label(root))
+        labels[i].image = pic
+        labels[i].configure(image = pic)
         labels[i].pack()
+
+        if i % 2 :
+            labels[i].place(x=1050+temp_x, y=temp_y)
+            temp_y += 150
+        else:
+            labels[i].place(x=1050, y=temp_y)
+
         pics.append(pic)
 
 root = tk.Tk()
 root.title("StoryTube")
-root.geometry("2000x1333")
+root.geometry("1800x920")
 
 bg = ImageTk.PhotoImage(Image.open('assets/background.png'))
 label = Label( root, image = bg)
@@ -150,9 +163,6 @@ click_btn = PhotoImage(file='assets/help_icon.png')
 img_label = Label(image=click_btn)
 btn2 = Button(root, bg = "#eae9d2", image=click_btn,command= clicked_help, borderwidth=0).place(x=235, y=770)
 
-# btn3 not working idk why
-btn3 = Button(root, bg = "#eae9d2", text="Clear Text",fg="red",command= txtbx.delete("1.0","end")).place(x=600, y=725)
-
 ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.Separator, takefocus= 1, cursor='man').place(relx = 0.67, rely = 0, relheight=1)
 
 
@@ -161,24 +171,23 @@ ttk.Separator(master=root, orient=VERTICAL, style='red.TSeparator', class_= ttk.
 
 lbl4 = Label(root, bg = "#eae9d2", text="Frames of the output animation\n")
 lbl4.place(x=1150, y=40)
-lbl4.config(font=('Times New Roman',15))
+# lbl4.config(font=('Times New Roman',15))
 
-i, temp_x, temp_y = 0, 250, 150
+# i, temp_x, temp_y = 0, 250, 150
 
-labels = []
+# labels = []
 
-# Create 6 empty labels
-for _ in range(NUM_LABELS):
-    label_1 = Label(root)
-    label_1.pack()
-    labels.append(label_1)
+# # Create 6 empty labels
+# for _ in range(NUM_LABELS):
+#     label_1 = Label(root)
+#     labels.append(label_1)
 
-    if i % 2:
-        label_1.place(x=1050+temp_x, y=temp_y)
-        temp_y += 150
-    else:
-        label_1.place(x=1050, y=temp_y)
+#     if i % 2:
+#         label_1.place(x=1050+temp_x, y=temp_y)
+#         temp_y += 150
+#     else:
+#         label_1.place(x=1050, y=temp_y)
 
-    i += 1
+#     i += 1
 
 root.mainloop()
