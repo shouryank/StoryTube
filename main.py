@@ -97,7 +97,7 @@ def display_pics():
 
     for i in range(NUM_LABELS):
         pic = ImageTk.PhotoImage((Image.open(images[i])).resize((200,125)))
-        labels[i] = Label(root, image = pic)
+        labels.append(Label(root, image = pic))
         labels[i].pack()
         pics.append(pic)
 
