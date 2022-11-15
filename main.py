@@ -11,7 +11,7 @@ from pathlib import Path
 from constants import dialogues_path, screenshots_path
 import sys
 from animation import animate
-from constants import main_path
+import time
 
 NUM_LABELS = min(len([name for name in os.listdir(screenshots_path) \
     if os.path.isfile(os.path.join(screenshots_path, name))]), 6)
@@ -30,6 +30,8 @@ def pipeline():
     txtbx.delete("1.0", "end")
 
     text = txt1.get(1.0, "end-1c")
+
+    start = time.time()
 
     # Coref resolution
     corefed_text = coref.resolve_coref(text)
@@ -71,6 +73,14 @@ def pipeline():
     animate.animate(characters, svs, weather)
 
     display_pics()
+
+    end = time.time()
+
+    time_taken = end - start
+
+    print("\n\nEXECUTION FINISHED.\n TIME TAKEN: ", time_taken)
+
+    redirector(svs.__repr__() + "\nEXECUTION FINISHED.\n TIME TAKEN: " + str(time_taken))
 
 
 def clicked_help():
