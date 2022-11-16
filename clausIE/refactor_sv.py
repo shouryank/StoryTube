@@ -37,7 +37,7 @@ def refactor_sv(SVs):
             action = WordNetLemmatizer().lemmatize(filter_sent(sv[1]), 'v')
             
 
-            if sv[1] == "said":
+            if sv[1] == "said" or 'say' in sv[1]:
                 # If dialogue exists, append both the verb 'said' and dialogue
                 dialogue = sv[2]
                 final_sv = (subject, action, dialogue)
@@ -50,6 +50,7 @@ def refactor_sv(SVs):
 
 
     print("Characters: ", characters)
+    print("SVs: ", svs)
 
     print("---------------END OF REFACTOR SV MODEL MODULE---------------")
 
