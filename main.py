@@ -55,10 +55,9 @@ def pipeline():
 
     # Save dialogues to be used
     line_no = 0
-    for line in svs:
-
+    for line_no, line in enumerate(svs):
         for SV in line:
-            if len(SV) != 3 or SV[1] not in ["said", "say"]:
+            if len(SV) != 3 or SV[1] not in ["said", "say", "says"]:
                 continue
 
             character = SV[0]
@@ -67,8 +66,6 @@ def pipeline():
             dialogue_maker_file.create_dialogue(char=character, line_no=line_no, dialogue=dialogue)
 
             break
-
-        line_no += 1
 
     animate.animate(characters, svs, weather)
 
@@ -101,13 +98,17 @@ def clicked_help():
 
 # CHAR ACTION SET:  {'adventure girl': ['dead', 'idle', 'jump', 'melee', 'run', 'say', 'shoot', 'slide'], 'boy': ['dead', 'hurt', 'idle', 'jump', 'run', 'say', 'slide'], 'cat': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'detective': ['dead', 'idle', 'jump', 'run', 'say', 'slide'], 'dino': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'dog': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'girl': ['dead', 'Idle', 'Jump', 'Run', 'say', 'Walk'], 'jack-o-latern': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'kid': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'knight': ['attack', 'dead', 'idle', 'jump', 'jumpattack', 'run', 'say', 'walk'], 'ninja boy': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'ninja girl': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'robot': ['dead', 'idle', 'jump', 'jumpmelee', 'jumpshoot', 'melee', 'run', 'runshoot', 'say', 'shoot', 'slide'], 'santa': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'zombie female': ['attack', 'dead', 'idle', 'say', 'walk'], 'zombie male': ['attack', 'dead', 'idle', 'say', 'walk']}
 
-def display_pics():
+labels = [] 
 
+def display_pics():
     temp_x, temp_y = 250, 150
 
     images = [img for img in glob.glob(str(screenshots_path / "*.jpg"))]
-    labels = []
     pics = []
+
+    for label in labels:
+        labels[i].image = None
+        label.configure(image = None)
 
     for i in range(NUM_LABELS):
         pic = ImageTk.PhotoImage((Image.open(images[i])).resize((200,125)))
