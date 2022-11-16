@@ -33,16 +33,13 @@ class MySprite(pygame.sprite.Sprite):
         
         self.images = {}
         self.image = pygame.Surface((0,0))
-        self.actions = []
         self.char = char
         self.index = 0
-        self.action_count = 0
         self.dir = dir
         self.x = x
         self.y = y
         self.prev_action = None
         self.dialogues_dir = str(dialogues_path / self.char)
-        self.dialogue_no = 0
 
     def play_dialogue(self, line_no):
         dialogue_path = self.dialogues_dir + "/dialogue" + str(line_no) + ".mp3"
@@ -90,6 +87,7 @@ class MySprite(pygame.sprite.Sprite):
         flag = 0
         self.prev_action = action
 
+        # Loading action images
         if action not in self.images or len(self.images[action]) == 0:
             print("Adding images for char ", self.char, " for action ", action)
             self.images[action] = [pygame.transform.scale(pygame.image.load(img) , (200,200)) for img in glob.glob(str(main_path) + "/assets/characters/" + self.char + "/" + action + "/*.png")]
@@ -116,6 +114,8 @@ class MySprite(pygame.sprite.Sprite):
                 self.movement_update(x, y, fps)
             else:
                 self.movement_update(0, 0, 0)
+        
+        # Display prev action of the character until other character's action is completed
         else:
             self.prev_action = action
             self.play_prev_frame()
@@ -124,6 +124,7 @@ class MySprite(pygame.sprite.Sprite):
         print("self.index: ", max(self.index - 1, 0), "for char and action: ", self.char, action)
 
         return flag
+
 
     def play_prev_frame(self, char_in_scene=False):
         print("Playing previous action", self.prev_action, "of", self.char)
@@ -157,6 +158,7 @@ def animate(characters, SVs, extracted_weather):
         char_objects[character] = MySprite(character, dir_list[dir] * ((line_no % 2) + 1), 480, dir)
 
     clock = pygame.time.Clock()
+    
     # svs is a list of lists. Each list refers to a line. Each line has a list of tuples if svos
     for line_no, line in enumerate(SVs):
         print("\n-----LINE ", line_no, "-----\n")

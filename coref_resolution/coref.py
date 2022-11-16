@@ -16,15 +16,10 @@ def resolve_coref(text):
     text = re.sub(r"([\"\'])(?:(?=(\\?))\2.)*?\1", " ", text)
 
     corefed_text = predictor.coref_resolved(text)
-    # prediction = predictor.predict(document=text)  # get prediction
-
-    # for cluster in prediction['clusters']:
-    #     print(cluster)  # list of clusters (the indices of spaCy tokens)
-
-    # print('\n\n') #Newline
 
     print('Coref resolved: ', corefed_text)  # resolved text
 
     print("---------------END OF COREF MODULE---------------")
 
     return corefed_text
+
