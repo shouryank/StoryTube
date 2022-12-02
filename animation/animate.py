@@ -8,6 +8,7 @@ from utils import char_action_set_getter
 from pathlib import Path
 import os
 from constants import dialogues_path, main_path
+from clausIE import weather_extraction
 
 language = 'en'
 
@@ -143,8 +144,7 @@ class MySprite(pygame.sprite.Sprite):
             print(e)
         
 
-def animate(characters, SVs, extracted_weather):
-    bg = pygame.transform.scale(pygame.image.load(weather_path + '/' + extracted_weather + '.jpg') , SIZE)
+def animate(characters, SVs, story):    
 
     pygame.init()
     pygame.display.set_caption("StoryTube")
@@ -160,8 +160,16 @@ def animate(characters, SVs, extracted_weather):
     clock = pygame.time.Clock()
     
     # svs is a list of lists. Each list refers to a line. Each line has a list of tuples if svos
+    story_split = story.split('.')
+    
     for line_no, line in enumerate(SVs):
         print("\n-----LINE ", line_no, "-----\n")
+
+        #weather extraction
+        extracted_weather = weather_extraction.get_weather(story_split[line_no])
+        weather = extracted_weather if extracted_weather != None else weather
+        bg = pygame.transform.scale(pygame.image.load(weather_path + '/' + weather + '.jpg') , SIZE)
+
         flag = 0
         dialogues = {}
         characters_in_line = [sv[0] for sv in line]

@@ -4,7 +4,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 from coref_resolution import coref
 from utils import char_action_set_getter, delete_files
-from clausIE import refactor_sv, sv, weather_extraction
+from clausIE import refactor_sv, sv
 from dialogue import dialogue_maker_file
 import os, glob
 from pathlib import Path
@@ -13,10 +13,10 @@ import sys
 from animation import animate
 import time
 
-NUM_LABELS = min(len([name for name in os.listdir(screenshots_path) \
-    if os.path.isfile(os.path.join(screenshots_path, name))]), 6)
-
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+NUM_LABELS = 0
+labels = []
 
 def pipeline():
     #extracting the story from the gui
@@ -27,6 +27,11 @@ def pipeline():
         A boy is walking on a rainy day. The ninja boy attacks him. He runs for his life. The boy dies. The male zombie said "Now its time for revenge and to kill ugwal".
         An adventure girl is walking on a sunny day. A robot says "Hi, I am AI, nice to meet you". The adventure girl says "oh my god! let's play together". The adventure girl runs.
     """
+
+    for _ in range(NUM_LABELS):
+        labels[0].destroy()
+        labels.pop(0)
+
     txtbx.delete("1.0", "end")
 
     text = txt1.get(1.0, "end-1c")
@@ -34,18 +39,13 @@ def pipeline():
     start = time.time()
 
     # Coref resolution
-    corefed_text = coref.resolve_coref(text)
-
-    # Weather extraction
-    weather = weather_extraction.get_weather(text)
+    corefed_text = coref.resolve_coref(text)    
 
     # Get svs
     svs = sv.extract_sv(text, corefed_text)
 
     # Assign char to action
     svs, characters = refactor_sv.refactor_sv(svs)
-
-    redirector(svs.__repr__())
 
     # Delete all saved dialogues
     delete_files.delete_all_files(dialogues_path)
@@ -67,7 +67,7 @@ def pipeline():
 
             break
 
-    animate.animate(characters, svs, weather)
+    animate.animate(characters, svs, text)
 
     display_pics()
 
@@ -75,8 +75,7 @@ def pipeline():
 
     time_taken = end - start
 
-    redirector(svs.__repr__() + "\nEXECUTION FINISHED.\n TIME TAKEN: " + str(time_taken))
-
+    redirector(svs, time_taken)
 
 def clicked_help():
     help_window = Toplevel()
@@ -98,20 +97,20 @@ def clicked_help():
 
 # CHAR ACTION SET:  {'adventure girl': ['dead', 'idle', 'jump', 'melee', 'run', 'say', 'shoot', 'slide'], 'boy': ['dead', 'hurt', 'idle', 'jump', 'run', 'say', 'slide'], 'cat': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'detective': ['dead', 'idle', 'jump', 'run', 'say', 'slide'], 'dino': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'dog': ['die', 'fall', 'hurt', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'girl': ['dead', 'Idle', 'Jump', 'Run', 'say', 'Walk'], 'jack-o-latern': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'kid': ['dead', 'idle', 'jump', 'run', 'say', 'walk'], 'knight': ['attack', 'dead', 'idle', 'jump', 'jumpattack', 'run', 'say', 'walk'], 'ninja boy': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'ninja girl': ['attack', 'climb', 'dead', 'glide', 'idle', 'jump', 'run', 'say', 'slide', 'throw'], 'robot': ['dead', 'idle', 'jump', 'jumpmelee', 'jumpshoot', 'melee', 'run', 'runshoot', 'say', 'shoot', 'slide'], 'santa': ['dead', 'idle', 'jump', 'run', 'say', 'slide', 'walk'], 'zombie female': ['attack', 'dead', 'idle', 'say', 'walk'], 'zombie male': ['attack', 'dead', 'idle', 'say', 'walk']}
 
-labels = [] 
-
 def display_pics():
-    temp_x, temp_y = 250, 150
+    
+    global NUM_LABELS
+    
+    NUM_LABELS = min(len([name for name in os.listdir(screenshots_path) \
+    if os.path.isfile(os.path.join(screenshots_path, name))]), 6)
 
+    temp_x, temp_y = 250, 150
     images = [img for img in glob.glob(str(screenshots_path / "*.jpg"))]
     pics = []
 
-    for label in labels:
-        labels[i].image = None
-        label.configure(image = None)
-
     for i in range(NUM_LABELS):
         pic = ImageTk.PhotoImage((Image.open(images[i])).resize((200,125)))
+
         labels.append(Label(root))
         labels[i].image = pic
         labels[i].configure(image = pic)
@@ -162,8 +161,19 @@ txtbx = Text(root, height = 25, width = 45, bg = "light yellow")
 txtbx.place( x = 550, y = 150)
 txtbx.config(font=('Times New Roman',15))
 
-def redirector(inputStr):     
-    txtbx.insert(INSERT, inputStr) 
+def redirector(svs, time_taken):  
+
+    string = str()
+    for sv in svs:
+        for tuple in sv:
+            string += tuple[0] + "  " + tuple[1] + " "
+            if len(tuple) > 2:
+                string += '"'  + tuple[2] + '"'
+            string += '\n'
+
+    string += "\nEXECUTION FINISHED.\nTIME TAKEN: " + str(time_taken)
+    
+    txtbx.insert(INSERT, string)
 
 btn1 = Button(root, bg = "#eae9d2", text="Submit story",fg="red", command=pipeline).place(x=225, y=725)
 

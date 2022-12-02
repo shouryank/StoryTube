@@ -1,8 +1,8 @@
 weathers = ["sunny", "rainy", "windy", "snowy", "night"]
 
 def get_weather(text):
-    # Default weather
-    extracted_weather = "sunny"
+
+    extracted_weather = None
 
     # If weather occurs in the text, return it
     for weather in weathers:
