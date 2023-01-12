@@ -25,7 +25,7 @@ def pipeline():
         A cat is walking on a snowy day. It jumped over a stone. It died. Dog is walking. It ran. The dog said "Hello world, the cat is going to die hahaha".
         this is sus : A detective was running on a sunny day. He saw a ninja boy. The ninja boy was attacking. The detective said "You are caught for attacking. Now die.". The ninja boy said "Catch me if you can".
         A boy is walking on a rainy day. The ninja boy attacks him. He runs for his life. The boy dies. The male zombie said "Now its time for revenge and to kill ugwal".
-        An adventure girl is walking on a sunny day. A robot says "Hi, I am AI, nice to meet you". The adventure girl says "oh my god! let's play together". The adventure girl runs.
+        An adventure girl is walking on a sunny day. A robot is walking on a rainy day. A robot says "Hi, I am AI, nice to meet you". The adventure girl says "oh my god! let's play together". The adventure girl runs.
     """
 
     for _ in range(NUM_LABELS):
